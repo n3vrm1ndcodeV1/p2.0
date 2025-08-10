@@ -17,7 +17,15 @@ async function getOrgAdmin() {
     method: "GET",
     credentials: "include",
   });
+
   const json = await res.json();
+  console.log("Response from accounts API:", json);
+
+  if (!json || !Array.isArray(json.data)) {
+    console.error("Unexpected API response structure — no 'data' array found.");
+    return []; // Return empty list to avoid crash
+  }
+
   const orgIds = [];
   for (const elem of json.data) {
     if (elem.role && elem.role.toUpperCase().includes("ADMIN")) {
@@ -27,11 +35,13 @@ async function getOrgAdmin() {
       }
     }
   }
+
   if (orgIds.length === 0) {
     console.log("No organizations with ADMIN role found.");
   }
   return orgIds;
 }
+
 
 async function invite(orgId, csrfToken) {
   console.log(`Sending invite to ${hackerMail} on org ${orgId}...`);
