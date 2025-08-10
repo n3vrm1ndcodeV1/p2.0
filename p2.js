@@ -21,18 +21,16 @@ async function getOrgAdmin() {
   const json = await res.json();
   console.log("Response from accounts API:", json);
 
-  if (!json || !Array.isArray(json.data)) {
-    console.error("Unexpected API response structure — no 'data' array found.");
-    return []; // Return empty list to avoid crash
+  if (!Array.isArray(json)) {
+    console.error("Unexpected API response — expected an array.");
+    return [];
   }
 
   const orgIds = [];
-  for (const elem of json.data) {
-    if (elem.role && elem.role.toUpperCase().includes("ADMIN")) {
-      if (elem.organization && elem.organization.id) {
-        orgIds.push(elem.organization.id);
-        console.log(`Found ADMIN role in organization ID: ${elem.organization.id}`);
-      }
+  for (const elem of json) {
+    if (elem.role && elem.role.toUpperCase() === "ADMIN" && elem.id) {
+      orgIds.push(elem.id);
+      console.log(`Found ADMIN role with ID: ${elem.id}`);
     }
   }
 
@@ -41,6 +39,7 @@ async function getOrgAdmin() {
   }
   return orgIds;
 }
+
 
 
 async function invite(orgId, csrfToken) {
