@@ -96,9 +96,6 @@ async function invite(orgId, csrfToken) {
   return res.ok;
 }
 
-
-}
-
 // Immediately invoke async function on script load
 (async () => {
   console.log("Script loaded. Starting workflow...");
